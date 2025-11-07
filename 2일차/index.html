@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPS 총게임</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <h1>로딩 중...</h1>
+        <p>클릭하여 시작</p>
+    </div>
+
+    <div id="game-ui">
+        <!-- 크로스헤어 -->
+        <div id="crosshair">
+            <div class="crosshair-line horizontal"></div>
+            <div class="crosshair-line vertical"></div>
+        </div>
+
+        <!-- HUD -->
+        <div id="hud">
+            <div id="health-bar">
+                <div class="hud-label">체력</div>
+                <div class="bar-container">
+                    <div id="health-fill" class="bar-fill"></div>
+                </div>
+                <div id="health-text">100 / 100</div>
+            </div>
+
+            <div id="ammo-display">
+                <div id="current-ammo">30</div>
+                <div id="ammo-separator">/</div>
+                <div id="reserve-ammo">90</div>
+            </div>
+
+            <div id="weapon-info">
+                <div id="weapon-name">돌격소총</div>
+            </div>
+
+            <div id="money-display">
+                <span>💰 </span><span id="money-amount">7000</span>원
+            </div>
+        </div>
+
+        <!-- 무기 상점 -->
+        <div id="weapon-shop" class="hidden">
+            <h2>무기 상점 (E키)</h2>
+            <div class="shop-items">
+                <div class="shop-item" data-weapon="revolver" data-price="3000">
+                    <h3>리볼버</h3>
+                    <p>데미지: 45 (헤드샷: 90)</p>
+                    <p>연사속도: 느림</p>
+                    <p>가격: 3000원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-weapon="autopistol" data-price="2500">
+                    <h3>연사권총</h3>
+                    <p>데미지: 18</p>
+                    <p>연사속도: 빠름</p>
+                    <p>가격: 2500원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-weapon="crossbow" data-price="4000">
+                    <h3>크로스보우</h3>
+                    <p>데미지: 49 (헤드샷: 70)</p>
+                    <p>가격: 4000원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-weapon="sniper" data-price="7000">
+                    <h3>저격총</h3>
+                    <p>데미지: 50 (헤드샷: 500)</p>
+                    <p>가격: 7000원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+            </div>
+            <button id="close-shop">닫기 (E키)</button>
+        </div>
+
+        <!-- 게임 오버 화면 -->
+        <div id="game-over-screen" class="hidden">
+            <h1>게임 오버</h1>
+            <p>웨이브: <span id="final-wave">0</span></p>
+            <p>처치한 좀비: <span id="final-kills">0</span></p>
+            <p>획득한 돈: <span id="final-money">0</span>원</p>
+            <button id="restart-button">다시 시작</button>
+        </div>
+
+        <!-- 다음 웨이브 시작 버튼 -->
+        <div id="next-wave-screen" class="hidden">
+            <h2>웨이브 클리어!</h2>
+            <p>+500원 획득</p>
+            <button id="start-next-wave-button">다음 웨이브 시작</button>
+        </div>
+
+        <!-- 게임 메시지 -->
+        <div id="game-messages"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
