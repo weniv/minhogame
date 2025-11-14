@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPS 총게임</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <h1>로딩 중...</h1>
+        <p>클릭하여 시작</p>
+    </div>
+
+    <div id="game-ui">
+        <!-- 크로스헤어 -->
+        <div id="crosshair">
+            <div class="crosshair-line horizontal"></div>
+            <div class="crosshair-line vertical"></div>
+        </div>
+
+        <!-- 체력 바 (하단 중앙) -->
+        <div id="health-bar">
+            <div class="hud-label">체력</div>
+            <div class="bar-container">
+                <div id="health-fill" class="bar-fill"></div>
+            </div>
+            <div id="health-text">100 / 100</div>
+        </div>
+
+        <!-- 설정 버튼 (왼쪽 상단) -->
+        <button id="settings-button">⚙️ 설정 (M키)</button>
+
+        <!-- HUD (우측 상단) -->
+        <div id="hud">
+            <div id="money-display">
+                <span>💰 </span><span id="money-amount">7000</span>원
+            </div>
+
+            <div id="weapon-info">
+                <div id="weapon-name">돌격소총</div>
+            </div>
+
+            <div id="ammo-display">
+                <div id="current-ammo">30</div>
+                <div id="ammo-separator">/</div>
+                <div id="reserve-ammo">90</div>
+            </div>
+        </div>
+
+        <!-- 설정 메뉴 -->
+        <div id="settings-menu" class="hidden">
+            <h2>⚙️ 설정 메뉴</h2>
+
+            <!-- 탭 메뉴 -->
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-tab="help">← 도움말</button>
+                <button class="settings-tab" data-tab="shop">아이템 구매 →</button>
+            </div>
+
+            <!-- 도움말 탭 -->
+            <div id="help-tab" class="settings-content">
+                <h3>게임 조작법</h3>
+                <div class="help-section">
+                    <p><strong>이동:</strong> W, A, S, D 또는 방향키</p>
+                    <p><strong>점프:</strong> 스페이스바</p>
+                    <p><strong>마우스 시점:</strong> 마우스 이동</p>
+                    <p><strong>발사:</strong> 마우스 좌클릭</p>
+                    <p><strong>조준:</strong> 마우스 우클릭</p>
+                    <p><strong>재장전:</strong> R키</p>
+                    <p><strong>무기 상점:</strong> E키</p>
+                    <p><strong>설정 메뉴:</strong> M키 (게임 일시정지)</p>
+                    <p><strong>다음 웨이브:</strong> Enter키</p>
+                </div>
+                <h3>메뉴 조작</h3>
+                <div class="help-section">
+                    <p><strong>탭 이동:</strong> 좌우 방향키 (← 도움말 / 아이템 구매 →)</p>
+                    <p><strong>아이템 선택:</strong> 상하 방향키 (아이템 구매 탭에서)</p>
+                    <p><strong>아이템 구매:</strong> Enter키</p>
+                    <p><strong>메뉴 닫기:</strong> Q키</p>
+                </div>
+                <h3>게임 규칙</h3>
+                <div class="help-section">
+                    <p>• 웨이브마다 좀비 수가 증가합니다</p>
+                    <p>• 좀비를 처치하면 100원을 획득합니다</p>
+                    <p>• 웨이브 클리어 시 500원 보너스를 받습니다</p>
+                    <p>• 헤드샷은 추가 데미지를 줍니다</p>
+                    <p>• 상점에서 다양한 무기를 구매할 수 있습니다</p>
+                </div>
+                <h3>무기 전환</h3>
+                <div class="help-section">
+                    <p><strong>1:</strong> 돌격소총 | <strong>2:</strong> 권총</p>
+                    <p><strong>3:</strong> 칼 | <strong>4:</strong> 수류탄</p>
+                    <p><strong>5-8:</strong> 구매한 추가 무기</p>
+                </div>
+            </div>
+
+            <!-- 아이템 구매 탭 -->
+            <div id="shop-tab" class="settings-content hidden">
+                <div class="navigation-hint">↑ ↓ 아이템 이동 | Enter 구매</div>
+
+                <h3 class="shop-category">무기</h3>
+                <div class="shop-items">
+                    <div class="shop-item" data-weapon="revolver" data-price="3000">
+                        <h3>리볼버</h3>
+                        <p>데미지: 45 (헤드샷: 90)</p>
+                        <p>연사속도: 느림</p>
+                        <p>가격: 3000원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-weapon="autopistol" data-price="2500">
+                        <h3>연사권총</h3>
+                        <p>데미지: 18</p>
+                        <p>연사속도: 빠름</p>
+                        <p>가격: 2500원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-weapon="crossbow" data-price="4000">
+                        <h3>크로스보우</h3>
+                        <p>데미지: 49 (헤드샷: 70)</p>
+                        <p>가격: 4000원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-weapon="sniper" data-price="7000">
+                        <h3>저격총</h3>
+                        <p>데미지: 50 (헤드샷: 500)</p>
+                        <p>가격: 7000원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                </div>
+
+                <h3 class="shop-category">탄약</h3>
+                <div class="shop-items">
+                    <div class="shop-item" data-type="ammo" data-ammo="assault" data-price="200">
+                        <h3>돌격소총 탄약</h3>
+                        <p>+30발</p>
+                        <p>가격: 200원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-type="ammo" data-ammo="pistol" data-price="100">
+                        <h3>권총 탄약</h3>
+                        <p>+12발</p>
+                        <p>가격: 100원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-type="ammo" data-ammo="revolver" data-price="150">
+                        <h3>리볼버 탄약</h3>
+                        <p>+6발</p>
+                        <p>가격: 150원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-type="ammo" data-ammo="autopistol" data-price="180">
+                        <h3>연사권총 탄약</h3>
+                        <p>+15발</p>
+                        <p>가격: 180원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-type="ammo" data-ammo="crossbow" data-price="250">
+                        <h3>크로스보우 화살</h3>
+                        <p>+5발</p>
+                        <p>가격: 250원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-type="ammo" data-ammo="sniper" data-price="300">
+                        <h3>저격총 탄약</h3>
+                        <p>+5발</p>
+                        <p>가격: 300원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                </div>
+
+                <h3 class="shop-category">소모품</h3>
+                <div class="shop-items">
+                    <div class="shop-item" data-type="potion" data-potion="health" data-price="500">
+                        <h3>체력 포션</h3>
+                        <p>체력 +50 회복</p>
+                        <p>가격: 500원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                    <div class="shop-item" data-type="potion" data-potion="speed" data-price="800">
+                        <h3>스피드 포션</h3>
+                        <p>이동속도 영구 증가</p>
+                        <p>+10% (중첩 가능)</p>
+                        <p>가격: 800원</p>
+                        <button class="buy-button">구매</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="close-settings">닫기 (Q키)</button>
+        </div>
+
+        <!-- 무기 상점 (E키) -->
+        <div id="weapon-shop" class="hidden">
+            <h2>무기 상점 (E키)</h2>
+
+            <h3 class="shop-category">무기</h3>
+            <div class="shop-items">
+                <div class="shop-item" data-weapon="revolver" data-price="3000">
+                    <h3>리볼버</h3>
+                    <p>데미지: 45 (헤드샷: 90)</p>
+                    <p>연사속도: 느림</p>
+                    <p>가격: 3000원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-weapon="autopistol" data-price="2500">
+                    <h3>연사권총</h3>
+                    <p>데미지: 18</p>
+                    <p>연사속도: 빠름</p>
+                    <p>가격: 2500원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-weapon="crossbow" data-price="4000">
+                    <h3>크로스보우</h3>
+                    <p>데미지: 49 (헤드샷: 70)</p>
+                    <p>가격: 4000원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-weapon="sniper" data-price="7000">
+                    <h3>저격총</h3>
+                    <p>데미지: 50 (헤드샷: 500)</p>
+                    <p>가격: 7000원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+            </div>
+
+            <h3 class="shop-category">탄약</h3>
+            <div class="shop-items">
+                <div class="shop-item" data-type="ammo" data-ammo="assault" data-price="200">
+                    <h3>돌격소총 탄약</h3>
+                    <p>+30발</p>
+                    <p>가격: 200원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-type="ammo" data-ammo="pistol" data-price="100">
+                    <h3>권총 탄약</h3>
+                    <p>+12발</p>
+                    <p>가격: 100원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-type="ammo" data-ammo="revolver" data-price="150">
+                    <h3>리볼버 탄약</h3>
+                    <p>+6발</p>
+                    <p>가격: 150원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-type="ammo" data-ammo="autopistol" data-price="180">
+                    <h3>연사권총 탄약</h3>
+                    <p>+15발</p>
+                    <p>가격: 180원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-type="ammo" data-ammo="crossbow" data-price="250">
+                    <h3>크로스보우 화살</h3>
+                    <p>+5발</p>
+                    <p>가격: 250원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-type="ammo" data-ammo="sniper" data-price="300">
+                    <h3>저격총 탄약</h3>
+                    <p>+5발</p>
+                    <p>가격: 300원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+            </div>
+
+            <h3 class="shop-category">소모품</h3>
+            <div class="shop-items">
+                <div class="shop-item" data-type="potion" data-potion="health" data-price="500">
+                    <h3>체력 포션</h3>
+                    <p>체력 +50 회복</p>
+                    <p>가격: 500원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+                <div class="shop-item" data-type="potion" data-potion="speed" data-price="800">
+                    <h3>스피드 포션</h3>
+                    <p>이동속도 영구 증가</p>
+                    <p>+10% (중첩 가능)</p>
+                    <p>가격: 800원</p>
+                    <button class="buy-button">구매</button>
+                </div>
+            </div>
+
+            <button id="close-shop">닫기 (Q키)</button>
+        </div>
+
+        <!-- 게임 오버 화면 -->
+        <div id="game-over-screen" class="hidden">
+            <h1>게임 오버</h1>
+            <p>웨이브: <span id="final-wave">0</span></p>
+            <p>처치한 좀비: <span id="final-kills">0</span></p>
+            <p>획득한 돈: <span id="final-money">0</span>원</p>
+            <button id="restart-button">다시 시작</button>
+        </div>
+
+        <!-- 다음 웨이브 시작 버튼 -->
+        <div id="next-wave-screen" class="hidden">
+            <h2>웨이브 클리어!</h2>
+            <p>+500원 획득</p>
+            <button id="start-next-wave-button">다음 웨이브 시작 (Enter)</button>
+        </div>
+
+        <!-- 게임 메시지 -->
+        <div id="game-messages"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
