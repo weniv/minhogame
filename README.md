@@ -1,2 +1,4 @@
 # minhogame
 민호가 만든 게임입니다. 책 출판과 대외 홍보용으로 사용하겠습니다.
+
+링크: https://weniv.github.io/minhogame/
